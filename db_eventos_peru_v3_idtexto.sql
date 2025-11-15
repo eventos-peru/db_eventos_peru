@@ -188,21 +188,3 @@ CREATE TABLE calificacion_servicio_cliente (
   status TINYINT(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =========================================================
--- 9. ÍNDICES
--- =========================================================
-
-CREATE INDEX idx_evento_cliente ON cotizacion(cliente_id);
-CREATE INDEX idx_evento_fecha ON cotizacion(fecha_evento);
-CREATE INDEX idx_evento_estado ON cotizacion(estado_actual_id);
-
-CREATE INDEX idx_detalle_evento ON cotizacion_detalle(evento_id);
-CREATE INDEX idx_detalle_servicio ON cotizacion_detalle(servicio_id);
-
-CREATE INDEX idx_proveedor_disponibilidad ON proveedor_disponibilidad(proveedor_id, fecha);
-
-CREATE INDEX idx_categoria_user ON categorias_servicio(user_id);
-
-CREATE INDEX idx_calif_cliente_evento ON calificacion_cliente(evento_id);
-CREATE INDEX idx_calif_proveedor_evento ON calificacion_proveedor_evento(evento_id);
-CREATE INDEX idx_calif_servicio_evento ON calificacion_servicio_cliente(evento_id);
