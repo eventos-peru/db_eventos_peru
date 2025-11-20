@@ -188,3 +188,81 @@ CREATE TABLE calificacion_servicio_cliente (
   status TINYINT(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+
+
+USE db_eventos_peru;
+select * from auth_users;
+
+INSERT INTO auth_users (id, email, password_hash, nombre, direccion, celular, rol) 
+VALUES 
+('USER001', 'cliente@email.com', 'hash_password_123', 'Juan Pérez', 'Av. Lima 123', '987654321', 'CLIENTE'),
+('USER002', 'proveedor@email.com', 'hash_password_456', 'María García', 'Av. Arequipa 456', '987654322', 'PROVEEDOR'),
+('USER003', 'admin@email.com', 'hash_password_789', 'Carlos López', 'Av. Javier Prado 789', '987654323', 'ADMIN');
+
+-- Tipos de evento
+INSERT INTO tipos_evento (id, user_id, nombre, descripcion) 
+VALUES 
+('TIPO001', 'USER003', 'Boda', 'Eventos de matrimonio y boda'),
+('TIPO002', 'USER003', 'Cumpleaños', 'Fiestas de cumpleaños'),
+('TIPO003', 'USER003', 'Corporativo', 'Eventos empresariales');
+
+-- Categorías de servicio
+INSERT INTO categorias_servicio (id, user_id, nombre, descripcion) 
+VALUES 
+('CAT001', 'USER003', 'Catering', 'Servicios de comida y bebida'),
+('CAT002', 'USER003', 'Decoración', 'Servicios de decoración de eventos'),
+('CAT003', 'USER003', 'Entretenimiento', 'Música y animación');
+
+-- Estados de evento
+INSERT INTO estados_evento (id, user_id, nombre, descripcion) 
+VALUES 
+('EST001', 'USER003', 'COTIZACION', 'En proceso de cotización'),
+('EST002', 'USER003', 'CONFIRMADO', 'Evento confirmado'),
+('EST003', 'USER003', 'COMPLETADO', 'Evento finalizado');
+
+-- Servicios
+INSERT INTO servicios (id, user_id, nombre, descripcion, precio_base, categoria_id) 
+VALUES 
+('SERV001', 'USER002', 'Buffet Ejecutivo', 'Servicio de comida buffet para eventos', 50.00, 'CAT001'),
+('SERV002', 'USER002', 'Decoración Clásica', 'Decoración elegante para eventos formales', 200.00, 'CAT002'),
+('SERV003', 'USER002', 'DJ Profesional', 'Servicio de música y animación', 150.00, 'CAT003');
+
+-- Proveedores
+INSERT INTO proveedores (id, user_id, nombre, rubro, contacto, telefono, email) 
+VALUES 
+('PROV001', 'USER002', 'Catering Delicias', 'Catering', 'Ana Torres', '987654100', 'catering@email.com'),
+('PROV002', 'USER002', 'Decoraciones Elegantes', 'Decoración', 'Luis Mendoza', '987654101', 'decoraciones@email.com'),
+('PROV003', 'USER002', 'Sonido Perfecto', 'Entretenimiento', 'Roberto Díaz', '987654102', 'sonido@email.com');
+
+INSERT INTO cotizacion (id, cliente_id, tipo_evento_id, nombre_evento, fecha_evento, hora_evento, numero_invitados, ubicacion, estado_actual_id) 
+VALUES 
+('EVT001', 'USER001', 'TIPO001', 'Boda Juan y María', '2024-12-15', '18:00:00', 100, 'Av. Lima 123, Miraflores', 'EST001'),
+('EVT002', 'USER001', 'TIPO002', 'Cumpleaños Carlos', '2024-11-20', '16:00:00', 50, 'Jr. Union 456, Lima', 'EST002');
+
+INSERT INTO ventas (id, evento_id, subtotal, impuestos, total, estado) 
+VALUES 
+('VENT001', 'EVT001', 435.00, 78.30, 513.30, 'PENDIENTE'),
+('VENT002', 'EVT002', 250.00, 45.00, 295.00, 'PAGADO');
+
+INSERT INTO proveedor_disponibilidad (id, proveedor_id, fecha, disponible) 
+VALUES 
+('DISP001', 'PROV001', '2024-12-15', 0), -- No disponible (ocupado)
+('DISP002', 'PROV001', '2024-12-16', 1), -- Disponible
+('DISP003', 'PROV002', '2024-12-15', 0); -- No disponible
+
+-- Calificación de cliente
+INSERT INTO calificacion_cliente (id, evento_id, cliente_id, evaluador_id, calificacion, comentario) 
+VALUES 
+('CAL_CLI001', 'EVT001', 'USER001', 'USER002', 5, 'Excelente cliente, muy puntual');
+
+-- Calificación de proveedor
+INSERT INTO calificacion_proveedor_evento (id, evento_id, proveedor_id, evaluador_id, calificacion, comentario) 
+VALUES 
+('CAL_PROV001', 'EVT001', 'PROV001', 'USER001', 4, 'Buen servicio de catering');
+
+-- Calificación de servicio
+INSERT INTO calificacion_servicio_cliente (id, evento_id, detalle_id, cliente_id, servicio_id, proveedor_id, calificacion, comentario) 
+VALUES 
+('CAL_SERV001', 'EVT001', 'DET001', 'USER001', 'SERV001', 'PROV001', 5, 'La comida estuvo excelente');
+
